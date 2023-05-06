@@ -32,6 +32,8 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread {
                 if (body != null)
                     binding.recyclerMovie.adapter = MovieAdapter(body) { movie -> onItemSelected(movie) }
+                    binding.recyclerMovie.adapter?.notifyDataSetChanged()
+
             }
 
         }
@@ -40,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onItemSelected(movie: Movie) {
         Toast.makeText(this, "Redirigiendo a: " + movie.name, Toast.LENGTH_SHORT).show()
-        /* val intent = Intent(this, DetailActivity::class.java)
+        val intent = Intent(this, MovieDetailActivity::class.java)
         intent.putExtra("movieId", movie.id)
         intent.putExtra("movieName", movie.name)
         intent.putExtra("movieRelease", movie.release)
@@ -51,6 +53,5 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("movieGif", movie.gif)
 
         startActivity(intent)
-        */
     }
 }
