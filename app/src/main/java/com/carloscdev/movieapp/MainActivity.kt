@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    // Envía datos de "movie" y redirige al activity MovieDetailActivity
     private fun onItemSelected(movie: Movie) {
         Toast.makeText(this, "Redirigiendo a: " + movie.name, Toast.LENGTH_SHORT).show()
         val intent = Intent(this, MovieDetailActivity::class.java)

@@ -1,5 +1,6 @@
 package com.carloscdev.movieapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
@@ -18,5 +19,10 @@ class MovieDetailActivity : AppCompatActivity() {
         binding.tvMovieRelease.text = "Release: " + intent.getStringExtra("movieRelease")
         Glide.with(binding.ivMoviePoster.context).load(intent.getStringExtra("moviePoster")).into(binding.ivMoviePoster)
         Glide.with(binding.ivMovieGif.context).load(intent.getStringExtra("movieGif")).into(binding.ivMovieGif)
+
+        binding.btReturn.setOnClickListener{
+            var intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

@@ -46,4 +46,19 @@
         app:layout_constraintTop_toBottomOf="@id/tvMovieName"
         tools:text="1h 2min" />
 
+    <Button
+        android:id="@+id/btMovieDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#D62C2C"
+        android:shadowColor="#232323"
+        android:shadowDx="5"
+        android:shadowRadius="5"
+        app:cornerRadius="10dp"
+        android:text="Eliminar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvMoviePlaytime" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

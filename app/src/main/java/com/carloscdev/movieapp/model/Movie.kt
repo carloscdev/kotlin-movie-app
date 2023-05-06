@@ -1,5 +1,6 @@
 package com.carloscdev.movieapp.model
 
+// Data que viene del servicio REST
 data class Movie(
     val id: Int,
     val name: String,
