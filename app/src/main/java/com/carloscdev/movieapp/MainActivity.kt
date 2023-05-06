@@ -4,12 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.carloscdev.movieapp.adapter.MovieAdapter
 import com.carloscdev.movieapp.databinding.ActivityMainBinding
 import com.carloscdev.movieapp.model.Movie
 import com.carloscdev.movieapp.model.MovieClient
-import kotlin.concurrent.thread
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,18 +29,11 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         val manager = GridLayoutManager(this, 2)
         binding.recyclerMovie.layoutManager = manager
-        thread {
+        lifecycleScope.launch {
             val movieListApi = MovieClient.service.listMovies()
-            val body = movieListApi?.execute()?.body()
-            runOnUiThread {
-                if (body != null)
-                    binding.recyclerMovie.adapter = MovieAdapter(body) { movie -> onItemSelected(movie) }
-                    binding.recyclerMovie.adapter?.notifyDataSetChanged()
-
-            }
-
+            binding.recyclerMovie.adapter = MovieAdapter(movieListApi) { movie -> onItemSelected(movie) }
+            binding.recyclerMovie.adapter?.notifyDataSetChanged()
         }
-
     }
 
     // Envía datos de "movie" y redirige al activity MovieDetailActivity
@@ -55,4 +51,5 @@ class MainActivity : AppCompatActivity() {
 
         startActivity(intent)
     }
+
 }

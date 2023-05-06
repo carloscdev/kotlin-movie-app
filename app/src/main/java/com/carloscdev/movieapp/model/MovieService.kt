@@ -7,5 +7,5 @@ interface MovieService {
 
     // Path para obtener listado de movies
     @GET("DisneyPosters2.json")
-    fun listMovies(): Call<List<Movie>?>?
+    suspend fun listMovies(): List<Movie>
 }
