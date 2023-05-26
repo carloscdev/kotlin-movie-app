@@ -10,28 +10,33 @@ import com.carloscdev.movieapp.adapter.MovieAdapter
 import com.carloscdev.movieapp.databinding.ActivityMainBinding
 import com.carloscdev.movieapp.model.Movie
 import com.carloscdev.movieapp.model.MovieClient
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
+    private val viewModel: MainActivityViewModel by viewModel()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Toast.makeText(this, "Bienvenido !!!", Toast.LENGTH_SHORT).show()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initRecyclerView()
     }
 
     private fun initRecyclerView() {
+        // Crea Data Store para guardar lista de movies
+
         val manager = GridLayoutManager(this, 2)
         binding.recyclerMovie.layoutManager = manager
         lifecycleScope.launch {
-            val movieListApi = MovieClient.service.listMovies()
-            binding.recyclerMovie.adapter = MovieAdapter(movieListApi) { movie -> onItemSelected(movie) }
+            viewModel.fetchMovies()
+            val movieListApi = viewModel.getMovies()
+            binding.recyclerMovie.adapter =
+                MovieAdapter(movieListApi) { movie -> onItemSelected(movie) }
             binding.recyclerMovie.adapter?.notifyDataSetChanged()
         }
     }
@@ -51,5 +56,4 @@ class MainActivity : AppCompatActivity() {
 
         startActivity(intent)
     }
-
 }

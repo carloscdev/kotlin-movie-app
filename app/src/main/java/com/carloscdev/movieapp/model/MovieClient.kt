@@ -13,5 +13,5 @@ object MovieClient {
         .build()
 
     // Se utiliza
-    val service = retrofit.create(MovieService::class.java)
+    val service: MovieService = retrofit.create(MovieService::class.java)
 }
