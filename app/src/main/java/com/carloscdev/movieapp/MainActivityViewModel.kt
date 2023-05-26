@@ -8,15 +8,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MainActivityViewModel(private val model: Model) : ViewModel() {
-    private var movieList: List<Movie> = emptyList()
+    val movies = model.movies
 
-    suspend fun fetchMovies() {
-        movieList = withContext(Dispatchers.IO) {
-            model.fetchMovies()
-        }
-    }
-
-    fun getMovies(): List<Movie> {
-        return movieList
+    fun removeMovie(movie: Movie) {
+        model.removeMovie(movie)
     }
 }

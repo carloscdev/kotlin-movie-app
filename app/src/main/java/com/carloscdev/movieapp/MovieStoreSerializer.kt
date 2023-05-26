@@ -5,7 +5,7 @@ import com.google.protobuf.InvalidProtocolBufferException
 import java.io.InputStream
 import java.io.OutputStream
 
-class MovieStoreSerializer: Serializer<MovieStore> {
+object MovieStoreSerializer: Serializer<MovieStore> {
     override val defaultValue: MovieStore = MovieStore.getDefaultInstance()
 
     override suspend fun readFrom(input: InputStream): MovieStore {

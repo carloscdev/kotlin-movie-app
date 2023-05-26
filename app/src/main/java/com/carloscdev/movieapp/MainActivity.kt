@@ -3,13 +3,17 @@ package com.carloscdev.movieapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.carloscdev.movieapp.adapter.MovieAdapter
 import com.carloscdev.movieapp.databinding.ActivityMainBinding
 import com.carloscdev.movieapp.model.Movie
 import com.carloscdev.movieapp.model.MovieClient
+import com.github.ajalt.timberkt.d
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initRecyclerView()
+        d { "onCreate" }
     }
 
     private fun initRecyclerView() {
@@ -33,11 +38,18 @@ class MainActivity : AppCompatActivity() {
         val manager = GridLayoutManager(this, 2)
         binding.recyclerMovie.layoutManager = manager
         lifecycleScope.launch {
-            viewModel.fetchMovies()
-            val movieListApi = viewModel.getMovies()
-            binding.recyclerMovie.adapter =
-                MovieAdapter(movieListApi) { movie -> onItemSelected(movie) }
-            binding.recyclerMovie.adapter?.notifyDataSetChanged()
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.movies.collect {
+                    binding.recyclerMovie.adapter = MovieAdapter(
+                        it,
+                        removeMovie = { movie ->
+                            removeMovie(movie)
+                        }
+                    ) { movie ->
+                        onItemSelected(movie)
+                    }
+                }
+            }
         }
     }
 
@@ -55,5 +67,9 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("movieGif", movie.gif)
 
         startActivity(intent)
+    }
+
+    fun removeMovie(movie: Movie) {
+        viewModel.removeMovie(movie)
     }
 }
